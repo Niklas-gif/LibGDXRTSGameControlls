@@ -22,7 +22,7 @@ public class GameScreen implements Screen {
 
     public GameScreen(RTSGame game){
         this.game = game;
-        map = new Texture("Test_Map.png");
+        map = new Texture("Isometric_Map.png");
         camera = new OrthographicCamera();
         camera.setToOrtho(false, GlobalVariables.SCREEN_WIDTH,GlobalVariables.SCREEN_HEIGHT);
         viewport = new FitViewport(GlobalVariables.SCREEN_WIDTH,GlobalVariables.SCREEN_HEIGHT,camera);
