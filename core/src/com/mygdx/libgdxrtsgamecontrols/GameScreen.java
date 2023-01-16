@@ -13,11 +13,14 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class GameScreen implements Screen {
     private final RTSGame game ;
-    private OrthographicCamera camera;
-    private Texture map;
-    private Viewport viewport;
+    private final OrthographicCamera camera;
+    private final Texture map;
+    private final Viewport viewport;
     private int width;
     private int height;
+    private int triggerArea = 100;
+    private int scrollSpeed = 5;
+    private float zoomSpeed = 2f;
     private Stage borders;
 
     public GameScreen(RTSGame game){
@@ -32,7 +35,6 @@ public class GameScreen implements Screen {
     public void show() {
         width = GlobalVariables.SCREEN_WIDTH;
         height = GlobalVariables.SCREEN_HEIGHT;
-
     }
 
     @Override
@@ -44,10 +46,11 @@ public class GameScreen implements Screen {
         game.batch.draw(map,0,0);
         game.batch.end();
         scroll();
+        zoom();
     }
 
     @Override
-    public void resize(int width, int height) {
+    public void resize(int width, int height) {//TODO Maybe shrink triggerarea according to the screen size ?
         System.out.println("width: " + width + " height: " + height );
         this.width = width;
         this.height = height;
@@ -75,25 +78,31 @@ public class GameScreen implements Screen {
         game.dispose();
     }
 
-    private void scroll(){ //Test Scroll Function TODO: Should not depend on the Screen size
+    private void zoom(){
         if(Gdx.input.isKeyPressed(Input.Keys.I) && camera.zoom < 3){
-            camera.zoom += 2f * Gdx.graphics.getDeltaTime();
+            camera.zoom += zoomSpeed * Gdx.graphics.getDeltaTime();
         }
         if(Gdx.input.isKeyPressed(Input.Keys.O) && camera.zoom > 0.5){
-            camera.zoom -= 2f * Gdx.graphics.getDeltaTime();
+            camera.zoom -= zoomSpeed * Gdx.graphics.getDeltaTime();
         }
-        if(Gdx.input.getX()>=width-500){
-            //System.out.println("scroll width:" + width);
-            camera.position.set(camera.position.x+=5,camera.position.y,0);
+    }
+
+    private void scroll(){
+        if(Gdx.input.getX()>=width-triggerArea){
+            camera.position.set(camera.position.x+=scrollSpeed,camera.position.y,0);
         }
-        if(Gdx.input.getX()<=100){
-            camera.position.set(camera.position.x -= 5, camera.position.y, 0);
+        if(Gdx.input.getX()<=triggerArea){
+            camera.position.set(camera.position.x-=scrollSpeed, camera.position.y, 0);
         }
-        if(Gdx.input.getY()<=100){
-            camera.position.set(camera.position.x,camera.position.y+=5,0);
+        if(Gdx.input.getY()<=triggerArea){
+            camera.position.set(camera.position.x,camera.position.y+=scrollSpeed,0);
         }
-        if(Gdx.input.getY()>=height-400){
-            camera.position.set(camera.position.x,camera.position.y-=5,0);
+        if(Gdx.input.getY()>=height-triggerArea){
+            camera.position.set(camera.position.x,camera.position.y-=scrollSpeed,0);
         }
+    }
+
+    private void accelerate(){
+        //TODO: Implement acceleration function whic increases the scrolling speed
     }
 }
