@@ -1,11 +1,12 @@
 package com.mygdx.libgdxrtsgamecontrols;
 
 import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 
-public class RTSGame extends ApplicationAdapter {
+public class RTSGame extends Game {
 	SpriteBatch batch;
 	Texture img;
 	
@@ -13,14 +14,15 @@ public class RTSGame extends ApplicationAdapter {
 	public void create () {
 		batch = new SpriteBatch();
 		img = new Texture("badlogic.jpg");
+		setScreen(new GameScreen(this));
 	}
 
 	@Override
 	public void render () {
-		ScreenUtils.clear(1, 0, 0, 1);
-		batch.begin();
+		super.render();
+		/*batch.begin();
 		batch.draw(img, 0, 0);
-		batch.end();
+		batch.end();*/
 	}
 	
 	@Override
