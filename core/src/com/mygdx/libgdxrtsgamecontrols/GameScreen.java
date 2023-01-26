@@ -39,19 +39,56 @@ public class GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        ScreenUtils.clear(Color.DARK_GRAY);
+        ScreenUtils.clear(new Color(0x3a7830));
         game.batch.setProjectionMatrix(camera.combined);
         camera.update();
         game.batch.begin();
         game.batch.draw(map,0,0);
         game.batch.end();
+        if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE)){
+            game.dispose();
+            System.exit(0);
+        }
         scroll();
         zoom();
     }
 
+
+    private void zoom(){
+        if(Gdx.input.isKeyPressed(Input.Keys.I) && camera.zoom < 3){
+            camera.zoom += zoomSpeed * Gdx.graphics.getDeltaTime();
+        }
+        if(Gdx.input.isKeyPressed(Input.Keys.O) && camera.zoom > 0.5){
+            camera.zoom -= zoomSpeed * Gdx.graphics.getDeltaTime();
+        }
+    }
+
+    private void scroll(){
+        if(Gdx.input.getX()>=width-triggerArea){
+            camera.position.set(
+                    camera.position.x+=scrollSpeed,camera.position.y,0);
+        }
+        if(Gdx.input.getX()<=triggerArea){
+            camera.position.set(
+                    camera.position.x-=scrollSpeed, camera.position.y, 0);
+        }
+        if(Gdx.input.getY()<=triggerArea){
+            camera.position.set(
+                    camera.position.x,camera.position.y+=scrollSpeed,0);
+        }
+        if(Gdx.input.getY()>=height-triggerArea){
+            camera.position.set(
+                    camera.position.x,camera.position.y-=scrollSpeed,0);
+        }
+    }
+
+    private void accelerate(){
+        //TODO: Implement acceleration function which increases the scrolling speed
+    }
+
     @Override
     public void resize(int width, int height) {//TODO Maybe shrink triggerarea according to the screen size ?
-        System.out.println("width: " + width + " height: " + height );
+        //System.out.println("width: " + width + " height: " + height );
         this.width = width;
         this.height = height;
         viewport.update(width,height);
@@ -76,33 +113,5 @@ public class GameScreen implements Screen {
     public void dispose() {
         map.dispose();
         game.dispose();
-    }
-
-    private void zoom(){
-        if(Gdx.input.isKeyPressed(Input.Keys.I) && camera.zoom < 3){
-            camera.zoom += zoomSpeed * Gdx.graphics.getDeltaTime();
-        }
-        if(Gdx.input.isKeyPressed(Input.Keys.O) && camera.zoom > 0.5){
-            camera.zoom -= zoomSpeed * Gdx.graphics.getDeltaTime();
-        }
-    }
-
-    private void scroll(){
-        if(Gdx.input.getX()>=width-triggerArea){
-            camera.position.set(camera.position.x+=scrollSpeed,camera.position.y,0);
-        }
-        if(Gdx.input.getX()<=triggerArea){
-            camera.position.set(camera.position.x-=scrollSpeed, camera.position.y, 0);
-        }
-        if(Gdx.input.getY()<=triggerArea){
-            camera.position.set(camera.position.x,camera.position.y+=scrollSpeed,0);
-        }
-        if(Gdx.input.getY()>=height-triggerArea){
-            camera.position.set(camera.position.x,camera.position.y-=scrollSpeed,0);
-        }
-    }
-
-    private void accelerate(){
-        //TODO: Implement acceleration function whic increases the scrolling speed
     }
 }
