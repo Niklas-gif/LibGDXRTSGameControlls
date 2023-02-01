@@ -21,7 +21,8 @@ public class GameScreen implements Screen {
     private int height;
     private int triggerArea = 100;
     private float scrollSpeed = 5f;
-    private float zoomSpeed = 2f;
+    private final float MAX_SCROLL_SPEED = 15f;
+    private final float ZOOM_SPEED = 2f;
     private Stage borders;
 
     public GameScreen(RTSGame game){
@@ -57,17 +58,15 @@ public class GameScreen implements Screen {
 
     private void zoom(){
         if(Gdx.input.isKeyPressed(Input.Keys.I) && camera.zoom < 3){
-            camera.zoom += zoomSpeed * Gdx.graphics.getDeltaTime();
+            camera.zoom += ZOOM_SPEED * Gdx.graphics.getDeltaTime();
         }
         if(Gdx.input.isKeyPressed(Input.Keys.O) && camera.zoom > 0.5){
-            camera.zoom -= zoomSpeed * Gdx.graphics.getDeltaTime();
+            camera.zoom -= ZOOM_SPEED * Gdx.graphics.getDeltaTime();
         }
     }
 
     private void scroll(){
         if(Gdx.input.getX()>=width-triggerArea){
-            accelerate();
-            System.out.println(scrollSpeed);
             camera.position.set(
                     camera.position.x+=accelerate(),camera.position.y,0);
         }
@@ -93,7 +92,7 @@ public class GameScreen implements Screen {
     }
 
     private float accelerate(){
-        if(!(scrollSpeed >= 15f)) {
+        if(!(scrollSpeed >= MAX_SCROLL_SPEED)) {
             return scrollSpeed += 5 * Gdx.graphics.getDeltaTime()/2;
         }
         else {
