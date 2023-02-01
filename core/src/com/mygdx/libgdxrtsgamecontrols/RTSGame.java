@@ -1,10 +1,8 @@
 package com.mygdx.libgdxrtsgamecontrols;
 
-import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.utils.ScreenUtils;
 
 public class RTSGame extends Game {
 	SpriteBatch batch;
@@ -20,9 +18,6 @@ public class RTSGame extends Game {
 	@Override
 	public void render () {
 		super.render();
-		/*batch.begin();
-		batch.draw(img, 0, 0);
-		batch.end();*/
 	}
 	
 	@Override

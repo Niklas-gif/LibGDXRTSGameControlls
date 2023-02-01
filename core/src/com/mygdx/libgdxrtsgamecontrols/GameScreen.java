@@ -1,6 +1,7 @@
 package com.mygdx.libgdxrtsgamecontrols;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
@@ -19,7 +20,7 @@ public class GameScreen implements Screen {
     private int width;
     private int height;
     private int triggerArea = 100;
-    private int scrollSpeed = 5;
+    private float scrollSpeed = 5f;
     private float zoomSpeed = 2f;
     private Stage borders;
 
@@ -65,30 +66,43 @@ public class GameScreen implements Screen {
 
     private void scroll(){
         if(Gdx.input.getX()>=width-triggerArea){
+            accelerate();
+            System.out.println(scrollSpeed);
             camera.position.set(
-                    camera.position.x+=scrollSpeed,camera.position.y,0);
+                    camera.position.x+=accelerate(),camera.position.y,0);
         }
-        if(Gdx.input.getX()<=triggerArea){
+        else if(Gdx.input.getX()<=triggerArea){
+            accelerate();
             camera.position.set(
-                    camera.position.x-=scrollSpeed, camera.position.y, 0);
+                    camera.position.x-=accelerate(), camera.position.y, 0);
         }
-        if(Gdx.input.getY()<=triggerArea){
+        else if(Gdx.input.getY()<=triggerArea){
+            accelerate();
             camera.position.set(
-                    camera.position.x,camera.position.y+=scrollSpeed,0);
+                    camera.position.x,camera.position.y+=accelerate(),0);
         }
-        if(Gdx.input.getY()>=height-triggerArea){
+        else if(Gdx.input.getY()>=height-triggerArea){
+            accelerate();
             camera.position.set(
-                    camera.position.x,camera.position.y-=scrollSpeed,0);
+                    camera.position.x,camera.position.y-=accelerate(),0);
         }
+        else{
+            scrollSpeed=5;
+        }
+
     }
 
-    private void accelerate(){
-        //TODO: Implement acceleration function which increases the scrolling speed
+    private float accelerate(){
+        if(!(scrollSpeed >= 15f)) {
+            return scrollSpeed += 5 * Gdx.graphics.getDeltaTime()/2;
+        }
+        else {
+            return scrollSpeed;
+        }
     }
 
     @Override
     public void resize(int width, int height) {//TODO Maybe shrink triggerarea according to the screen size ?
-        //System.out.println("width: " + width + " height: " + height );
         this.width = width;
         this.height = height;
         viewport.update(width,height);
